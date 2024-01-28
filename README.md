@@ -24,14 +24,28 @@ The project is written in Python 3.11. The required packages are listed in the [
 
 The program can be run with the following command:
 
+- 2D Packing Problem - [Mixed-Integer Linear Programming (MIP)]
     ```
-    python3 Main.py 
+    python3 greed_2d.py -W <Container Width> -H <Container Hight> -f <file path> -p <plot> -v <verbose>
+    ```
+- 2D Packing Problem - [Genetic Algorithm (GA)]
+    ```
+    python3 greed_2d.py -W <Container Width> -H <Container Hight> -f <file path> -p <plot> -v <verbose>
+    -pop <population size> -g <max generations> -n_mut <number of mutations> -p_mut <probability of mutation> -e <number of elites>
+    ```
+- 3D Packing Problem - [Mixed-Integer Linear Programming (MIP)]
+    ```
+    python3 greed_3d.py -W <Container Width> -H <Container Hight> -D <Container Depth> -f <file path> -p <plot> -m <interactive plot> -v <verbose>
+    ```
+- 3D Packing Problem - [Genetic Algorithm (GA)]
+    ```
+    python3 greed_3d.py -W <Container Width> -H <Container Hight> -D <Container Depth> -f <file path> -p <plot> -m <interactive plot> -v <verbose>
+    -pop <population size> -g <max generations> -n_mut <number of mutations> -p_mut <probability of mutation> -e <number of elites>
     ```
 
   - Help:
       ```
-      python3 egmMain.py -h
+      python3 <program.py> -h
       ```
 
-## Authors
-Giovanni Scialla, Thomas Trevisan
+**Note:** The file with items should be in the folder 'data' and must be a csv file containing in each row the dimensions of each item.
