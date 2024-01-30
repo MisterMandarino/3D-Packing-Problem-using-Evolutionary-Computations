@@ -1,9 +1,12 @@
 from plot import *
-from random import choices, randint, randrange, random, choice
+
+from random import choices, randint, randrange, random
 import numpy as np
 from tqdm import tqdm
+
 import os
 import sys
+import time
 
 import argparse
 
@@ -162,7 +165,6 @@ def run_evolution(pop_size=100, generation_limit: int = 100, num_mutation = 1, m
         worst_fitnesses.append(fitness(population[-1], items))
         
         if fitness(population[0], items) == fitness_limit:
-            print('All items can fit perfectly in the bin!')
             break
         
         next_generation = population[0:n_elites] ## Elitism
@@ -184,6 +186,7 @@ def run_evolution(pop_size=100, generation_limit: int = 100, num_mutation = 1, m
     return population, i, best_fitness, best_fitnesses, worst_fitnesses, fitness_limit
 
 ## Solve the 2D Packing Problem
+start_time = time.time()
 population, generations, fit, best_fits, worst_fits, fit_lim = run_evolution(pop_size=pop_size,
                                                                             generation_limit=gen_limit, 
                                                                             num_mutation=n_mutations, 
@@ -191,6 +194,7 @@ population, generations, fit, best_fits, worst_fits, fit_lim = run_evolution(pop
                                                                             n_elites=n_elites)
 
 if VERBOSE:
+    print("---Execution Time: %s seconds ---" % (time.time() - start_time))
     print('number of generations: ', generations)
     print('items: ', items)
     print('best solution: ', population[0])

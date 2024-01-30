@@ -3,7 +3,7 @@
 Project for the 'Bio-inspired Artificial Intelligence' course of the Master's Degree in Artificial Intelligence Systems at the University of Trento, A.Y. 2023/2024.
 
 ## Description
-The project consists of designing and implementing a solution for Optimizing the Bin Packing Problem by using Evolutionary Computations [project description](DM_Project.pdf).
+The project consists of designing and implementing a solution for Optimizing the Bin Packing Problem by using Evolutionary Computations [project paper](Report.pdf).
 
 ## Dependencies
 The project is written in Python 3.11. The required packages are listed in the [requirements](requirements.txt) file.
@@ -48,4 +48,4 @@ The program can be run with the following command:
       python3 <program.py> -h
       ```
 
-**Note:** The file with items should be in the folder 'data' and must be a csv file containing in each row the dimensions of each item.
+**Note:** The file with items should be in the folder 'data' and must be a csv format file containing in each row the dimensions of each item.

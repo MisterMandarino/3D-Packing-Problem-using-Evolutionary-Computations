@@ -1,6 +1,8 @@
 from plot import *
 from mip import *
 from itertools import permutations
+
+import time
 import os
 import sys
 
@@ -106,6 +108,7 @@ for i in range(numberOfVariables):
 ## Solving
 model.max_gap = 0.05
 model.verbose = 0
+start_time = time.time()
 status = model.optimize(max_seconds=600)
 
 positions = []
@@ -113,6 +116,7 @@ orientations = []
 
 if status == OptimizationStatus.OPTIMAL:
     print('The Problem is FEASIBLE')
+    print("---Execution Time: %s seconds ---" % (time.time() - start_time))
     if VERBOSE:
         print(f'solution: {model.objective_value}')
         items_orientation = dict()
@@ -154,3 +158,4 @@ if status == OptimizationStatus.OPTIMAL:
         plot_configuration(positions, orientations, W, H)
 elif status == OptimizationStatus.INFEASIBLE:
     print('The Problem is INFEASIBLE')
+    print("---Execution Time: %s seconds ---" % (time.time() - start_time))

@@ -1,6 +1,8 @@
 from plot import *
 from mip import *
 from itertools import permutations
+
+import time
 import os
 import sys
 
@@ -14,7 +16,7 @@ parser.add_argument('-D', '--DEPTH', type=int, required=True, help='The Depth of
 parser.add_argument('-f', '--FILE', type=str, required=True, help='The csv file of the items')
 parser.add_argument('-p', '--PLOT', default=False, type=bool, help='Whether to plot the results or not')
 parser.add_argument('-m', '--MODE', default=False, type=bool, help='Interactive plotting')
-parser.add_argument('-v', '--VERBOSE', default=True, type=bool, help='Whether to show items positions')
+parser.add_argument('-v', '--VERBOSE', default=False, type=bool, help='Whether to show items positions')
 
 args = parser.parse_args()
 
@@ -122,6 +124,7 @@ for i in range(numberOfVariables):
 ## Solving
 model.max_gap = 0.05
 model.verbose = 0
+start_time = time.time()
 status = model.optimize(max_seconds=600)
 
 positions = []
@@ -129,41 +132,42 @@ orientations = []
 
 if status == OptimizationStatus.OPTIMAL:
     print('The Problem is FEASIBLE')
+    print("---Execution Time: %s seconds ---" % (time.time() - start_time))
+    print(f'solution: {model.objective_value}')
+    items_orientation = dict()
+    for v in model.vars:
+        if v.name[0] == "s" and v.x >= 0.98:
+            sep_name = v.name.split("_")
+            item_name = f"Item {sep_name[1]}"
+
+            items_orientation[item_name] = list()
+
+            items_orientation[item_name].append(w[int(sep_name[1])-1][int(sep_name[2])-1])
+            items_orientation[item_name].append(h[int(sep_name[1])-1][int(sep_name[2])-1])
+            items_orientation[item_name].append(d[int(sep_name[1])-1][int(sep_name[2])-1])
+
+    print("Items:")
+    position = []
+    for index, v in enumerate(model.vars):
+        
+        if v.name[0] == "x":
+            sep_name = v.name.split("_")
+            print(f"\tItem {sep_name[1]}:")
+            # print(f"\t\tposition: [{round(v.x/unit)}, ", end="")
+            print(f"\t\tposition: [{v.x}, ", end="")
+            position.append(v.x)
+        elif v.name[0] == "y":
+            print(f"{v.x}, ", end="")
+            position.append(v.x)
+        elif v.name[0] == "z":
+            print(f"{v.x}],")
+            position.append(v.x)
+            positions.append(position)
+            position = []
+            sep_name = v.name.split("_")
+            print(f"\t\torientation: {items_orientation[f'Item {sep_name[1]}']}")
+            orientations.append(items_orientation[f'Item {sep_name[1]}'])
     if VERBOSE:
-        print(f'solution: {model.objective_value}')
-        items_orientation = dict()
-        for v in model.vars:
-            if v.name[0] == "s" and v.x >= 0.98:
-                sep_name = v.name.split("_")
-                item_name = f"Item {sep_name[1]}"
-
-                items_orientation[item_name] = list()
-
-                items_orientation[item_name].append(w[int(sep_name[1])-1][int(sep_name[2])-1])
-                items_orientation[item_name].append(h[int(sep_name[1])-1][int(sep_name[2])-1])
-                items_orientation[item_name].append(d[int(sep_name[1])-1][int(sep_name[2])-1])
-
-        print("Items:")
-        position = []
-        for index, v in enumerate(model.vars):
-            
-            if v.name[0] == "x":
-                sep_name = v.name.split("_")
-                print(f"\tItem {sep_name[1]}:")
-                # print(f"\t\tposition: [{round(v.x/unit)}, ", end="")
-                print(f"\t\tposition: [{v.x}, ", end="")
-                position.append(v.x)
-            elif v.name[0] == "y":
-                print(f"{v.x}, ", end="")
-                position.append(v.x)
-            elif v.name[0] == "z":
-                print(f"{v.x}],")
-                position.append(v.x)
-                positions.append(position)
-                position = []
-                sep_name = v.name.split("_")
-                print(f"\t\torientation: {items_orientation[f'Item {sep_name[1]}']}")
-                orientations.append(items_orientation[f'Item {sep_name[1]}'])
         print("boxes_dimensions = ", end="")
         print(orientations)
         print("boxes_positions = ", end="")
@@ -176,3 +180,4 @@ if status == OptimizationStatus.OPTIMAL:
 
 elif status == OptimizationStatus.INFEASIBLE:
     print('The Problem is INFEASIBLE')
+    print("---Execution Time: %s seconds ---" % (time.time() - start_time))

@@ -22,17 +22,20 @@ def rotate_items(genome, items):
 def rotate_items_3d(genome, items):
     new_items = []
     for item, gene in zip(items, genome):
-        w,h,d = item
+        w,h,d = item[0], item[1], item[2]
 
         if gene[3] == 1:
-            h = item[2]
-            d = item[1]
+            temp = h
+            h = d
+            d = temp
         if gene[4] == 1:
-            w = item[2]
-            d = item[0]
+            temp = w
+            w = d
+            d = temp
         if gene[5] == 1:
-            w = item[1]
-            h = item[0]
+            temp = w
+            w = h
+            h = temp
 
         new_items.append((w,h,d))
     return new_items
@@ -117,6 +120,9 @@ def plot_configuration_3d(configuration, items, W, H, D, multi_color=False):
     # Plot the boxes
     plot_boxes(ax, configuration, items, multi_color=multi_color)
 
+    # Adjust aspect ratio to make the plot rectangular
+    ax.set_box_aspect([W, H, D])
+
     # Set labels
     ax.set_xlabel('X-axis')
     ax.set_ylabel('Y-axis')
@@ -141,6 +147,9 @@ def plot_configuration_3d_with_rotation(configuration, items, W, H, D, multi_col
 
     # Plot the boxes
     plot_boxes(ax, dimensions, new_items, multi_color=multi_color)
+
+    # Adjust aspect ratio to make the plot rectangular
+    ax.set_box_aspect([W, H, D])
 
     # Set labels
     ax.set_xlabel('X-axis')
@@ -173,7 +182,7 @@ def plot_boxes_interactive(fig, boxes_pos, boxes_dim):
                                 showscale=False,
                                 opacity=1.0,
                                 color=color,
-                                flatshading=True                          
+                                flatshading=True                         
                                 ))
         
 def plot_configuration_3d_interactive(configuration, items, W, H, D):
@@ -209,7 +218,7 @@ def plot_configuration_3d_interactive_with_rotation(configuration, items, W, H, 
                                  xaxis=dict(range=[0, W]),
                                  yaxis=dict(range=[0, H]),
                                  zaxis=dict(range=[0, D]),
-                                 aspectratio=dict(x=1, y=1, z=1)))
+                                 aspectratio=dict(x=W, y=H, z=D)))
 
     # Show the interactive plot
     fig.show()
