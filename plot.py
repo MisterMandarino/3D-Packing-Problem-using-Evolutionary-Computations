@@ -194,7 +194,7 @@ def plot_configuration_3d_interactive(configuration, items, W, H, D):
     plot_boxes_interactive(fig, configuration, items)
 
     # Set layout
-    fig.update_layout(scene=dict(aspectmode="cube",
+    fig.update_layout(scene=dict(aspectmode="data",
                                  xaxis=dict(range=[0, W]),
                                  yaxis=dict(range=[0, H]),
                                  zaxis=dict(range=[0, D]),
@@ -214,7 +214,7 @@ def plot_configuration_3d_interactive_with_rotation(configuration, items, W, H, 
     plot_boxes_interactive(fig, dimensions, new_items)
 
     # Set layout
-    fig.update_layout(scene=dict(aspectmode="cube",
+    fig.update_layout(scene=dict(aspectmode="data",
                                  xaxis=dict(range=[0, W]),
                                  yaxis=dict(range=[0, H]),
                                  zaxis=dict(range=[0, D]),
